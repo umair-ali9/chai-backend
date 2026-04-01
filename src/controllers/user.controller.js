@@ -15,14 +15,14 @@ const regiesterUser = asyncHandler( async (req, res) => {
     if(!email.includes('@') || !email.includes('.')){
         throw new ApiError(400,"Invalid email format")
     }
-    const existedUser = User.findOne({
+    const existedUser = await User.findOne({
         $or: [{username}, {email}]
     })
     if (existedUser) {
         throw new ApiError(409, "User with email or username already exists")
     }
-    const avataLocalPath = req.files?.avatar[0]?.path
-    const coverImageLocalPath = req.files?.coverImage[0]?.path
+    const avataLocalPath = req.files?.avatar?.[0]?.path
+    const coverImageLocalPath = req.files?.coverImage?.[0]?.path
 
     if (!avataLocalPath) {
         throw new ApiError(400, "Avatar file is required")
